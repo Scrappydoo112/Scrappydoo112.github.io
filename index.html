@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Clicker with GUI</title>
+    <title>Cookie Clicker with Auto Clicker</title>
+    <link href="style.css?v=9" rel="stylesheet" type="text/css">
+    <script src="main.js?v=10"></script>
+    <script src="base64.js"></script>
     <style>
+        /* Auto Clicker GUI Styles */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -45,7 +49,15 @@
     </style>
 </head>
 <body>
-    <h1>Auto Clicker with GUI</h1>
+    <h1>Cookie Clicker</h1>
+    <div id="wrapper">
+        <!-- Existing Cookie Clicker Content -->
+        <div id="cookieAnchor">
+            <button id="bigCookie">Big Cookie</button>
+        </div>
+    </div>
+
+    <!-- Auto Clicker GUI -->
     <div class="menu" id="menu">
         <label for="clicksPerSecond">Clicks per second:</label>
         <input type="number" id="clicksPerSecond" value="10" min="1" max="1000">
@@ -55,7 +67,12 @@
         
         <button id="toggleAutoClick">Start Auto-Clicker</button>
     </div>
+
     <script>
+        // Cookie Clicker Version
+        const VERSION = "2.052";
+
+        // Auto Clicker Script
         let autoClickerInterval = null;
 
         // Function to start the auto-clicker
