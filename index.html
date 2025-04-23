@@ -292,190 +292,134 @@ var App=typeof App==='undefined'?0:App;
         <p><!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=900, initial-scale=1.0">
-    <title>Standalone Cookie Clicker with Auto Clicker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=900, initial-scale=1.0">
+  <title>Standalone Cookie Clicker with Auto Clicker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
 
-    <!-- Internal CSS -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
+    #bigCookie {
+      width: 150px;
+      height: 150px;
+      background-color: #d2691e;
+      border-radius: 50%;
+      border: 3px solid #8b4513;
+      font-size: 20px;
+      color: #fff;
+      text-align: center;
+      line-height: 150px;
+      cursor: pointer;
+    }
 
-        #wrapper {
-            margin: 0 auto;
-            max-width: 900px;
-        }
+    .menu {
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      width: 300px;
+      text-align: left;
+      background-color: #f9f9f9;
+      display: none; /* Hide menu by default */
+    }
 
-        #topBar {
-            margin-bottom: 20px;
-            font-size: 16px;
-            font-weight: bold;
-        }
+    .menu label {
+      display: block;
+      margin-bottom: 10px;
+    }
 
-        #game {
-            margin-top: 20px;
-        }
+    .menu input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
 
-        #bigCookie {
-            width: 150px;
-            height: 150px;
-            background-color: #d2691e;
-            border-radius: 50%;
-            border: 3px solid #8b4513;
-            font-size: 20px;
-            color: #fff;
-            text-align: center;
-            line-height: 150px;
-            cursor: pointer;
-        }
+    .menu button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-        #cookieNumbers {
-            margin-top: 10px;
-            font-size: 24px;
-        }
-
-        .menu {
-            margin: 20px auto;
-            padding: 20px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            width: 300px;
-            text-align: left;
-            background-color: #f9f9f9;
-            display: none; /* Hide menu by default */
-        }
-
-        .menu label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .menu input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        .menu button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .menu button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .menu button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
+  <h1>Cookie Clicker</h1>
+  <button id="bigCookie">Big Cookie</button>
+  <div id="cookieNumbers">0 Cookies</div>
 
-    <div id="wrapper">
-        <!-- Top Bar -->
-        <div id="topBar">
-            <div>Cookie Clicker - Standalone Version</div>
-        </div>
+  <!-- Auto Clicker GUI -->
+  <div class="menu" id="menu">
+    <label for="clicksPerSecond">Clicks per second:</label>
+    <input type="number" id="clicksPerSecond" value="10" min="1" max="1000">
 
-        <!-- Game Section -->
-        <div id="game">
-            <div id="cookieAnchor">
-                <button id="bigCookie">Big Cookie</button>
-                <div id="cookieNumbers">0 Cookies</div>
-            </div>
-        </div>
-    </div>
+    <label for="clickSpeed">Click speed (ms per click):</label>
+    <input type="number" id="clickSpeed" value="100" min="1" max="1000">
 
-    <!-- Auto Clicker GUI -->
-    <div class="menu" id="menu">
-        <label for="clicksPerSecond">Clicks per second:</label>
-        <input type="number" id="clicksPerSecond" value="10" min="1" max="1000">
+    <button id="toggleAutoClick">Start Auto-Clicker</button>
+  </div>
 
-        <label for="clickSpeed">Click speed (ms per click):</label>
-        <input type="number" id="clickSpeed" value="100" min="1" max="1000">
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let cookies = 0;
+      let autoClickerInterval = null;
 
-        <button id="toggleAutoClick">Start Auto-Clicker</button>
-    </div>
+      // Function to update cookie count
+      function updateCookieCount() {
+        document.getElementById('cookieNumbers').textContent = `${cookies} Cookies`;
+      }
 
-    <!-- Internal JavaScript -->
-    <script>
-        let cookies = 0;
-        let autoClickerInterval = null;
-
-        // Update cookie count on UI
-        function updateCookieCount() {
-            const cookieNumbers = document.getElementById('cookieNumbers');
-            cookieNumbers.textContent = `${cookies} Cookies`;
+      // Function to toggle the menu
+      function toggleMenu() {
+        const menu = document.getElementById('menu');
+        if (menu.style.display === 'none' || menu.style.display === '') {
+          menu.style.display = 'block';
+        } else {
+          menu.style.display = 'none';
         }
+      }
 
-        // Function to start the auto-clicker
-        function startAutoClicker() {
-            const clicksPerSecond = parseInt(document.getElementById('clicksPerSecond').value);
-            const clickSpeed = 1000 / clicksPerSecond; // Convert clicks per second to milliseconds per click
-
-            const bigCookie = document.getElementById('bigCookie');
-            if (!bigCookie) {
-                alert('Big Cookie element not found!');
-                return;
-            }
-
-            if (autoClickerInterval) {
-                clearInterval(autoClickerInterval); // Clear any existing interval
-            }
-
-            autoClickerInterval = setInterval(() => {
-                bigCookie.click();
-            }, clickSpeed);
+      // Listen for the 'G' key press
+      document.addEventListener('keydown', function (event) {
+        if (event.key.toLowerCase() === 'g') {
+          toggleMenu();
         }
+      });
 
-        // Function to stop the auto-clicker
-        function stopAutoClicker() {
-            if (autoClickerInterval) {
-                clearInterval(autoClickerInterval);
-                autoClickerInterval = null;
-            }
+      // Big cookie click event
+      document.getElementById('bigCookie').addEventListener('click', function () {
+        cookies++;
+        updateCookieCount();
+      });
+
+      // Auto Clicker functionality
+      document.getElementById('toggleAutoClick').addEventListener('click', function () {
+        const clicksPerSecond = parseInt(document.getElementById('clicksPerSecond').value);
+        const clickSpeed = 1000 / clicksPerSecond;
+
+        if (autoClickerInterval) {
+          clearInterval(autoClickerInterval);
+          autoClickerInterval = null;
+          this.textContent = 'Start Auto-Clicker';
+        } else {
+          autoClickerInterval = setInterval(() => {
+            document.getElementById('bigCookie').click();
+          }, clickSpeed);
+          this.textContent = 'Stop Auto-Clicker';
         }
-
-        // Toggle button functionality
-        document.getElementById('toggleAutoClick').addEventListener('click', function () {
-            if (autoClickerInterval) {
-                stopAutoClicker();
-                this.textContent = 'Start Auto-Clicker';
-            } else {
-                startAutoClicker();
-                this.textContent = 'Stop Auto-Clicker';
-            }
-        });
-
-        // Function to toggle the visibility of the menu
-        function toggleMenu() {
-            const menu = document.getElementById('menu');
-            if (menu.style.display === 'none' || menu.style.display === '') {
-                menu.style.display = 'block'; // Show the menu
-            } else {
-                menu.style.display = 'none'; // Hide the menu
-            }
-        }
-
-        // Listen for the 'G' key press to toggle the menu
-        document.addEventListener('keydown', function (event) {
-            if (event.key.toLowerCase() === 'g') { // Check if 'G' is pressed
-                toggleMenu();
-            }
-        });
-
-        // Big Cookie Click Event
-        document.getElementById('bigCookie').addEventListener('click', function () {
-            cookies++;
-            updateCookieCount();
-        });
-    </script>
+      });
+    });
+  </script>
 </body>
 </html></p>
     </div>
