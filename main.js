@@ -21,36 +21,106 @@ function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp
 
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 
-// Function to simulate rapid clicking using requestAnimationFrame
-function animationFrameClicker() {
-    const bigCookie = document.getElementById('bigCookie');
-    if (!bigCookie) {
-        console.error('Big Cookie not found!');
-        return;
-    }
-
-    let keepClicking = true; // A flag to control the loop
-
-    function clickLoop() {
-        if (keepClicking) {
-            bigCookie.click();
-            requestAnimationFrame(clickLoop); // Schedule the next click
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Clicker with GUI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
         }
-    }
+        .menu {
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            width: 300px;
+            text-align: left;
+            background-color: #f9f9f9;
+        }
+        .menu label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .menu input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .menu button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .menu button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auto Clicker with GUI</h1>
+    <div class="menu">
+        <label for="clicksPerSecond">Clicks per second:</label>
+        <input type="number" id="clicksPerSecond" value="10" min="1" max="1000">
+        
+        <label for="clickSpeed">Click speed (ms per click):</label>
+        <input type="number" id="clickSpeed" value="100" min="1" max="1000">
+        
+        <button id="toggleAutoClick">Start Auto-Clicker</button>
+    </div>
+    <script>
+        let autoClickerInterval = null;
 
-    clickLoop(); // Start the loop
+        // Function to start the auto-clicker
+        function startAutoClicker() {
+            const clicksPerSecond = parseInt(document.getElementById('clicksPerSecond').value);
+            const clickSpeed = 1000 / clicksPerSecond; // Convert clicks per second to milliseconds per click
+            
+            const bigCookie = document.getElementById('bigCookie'); // Replace with your clickable element
+            if (!bigCookie) {
+                alert('Big Cookie element not found!');
+                return;
+            }
 
-    // Stop the clicking by setting keepClicking to false
-    window.stopClicker = () => {
-        keepClicking = false;
-        console.log('Stopped animation-frame clicking!');
-    };
-}
+            if (autoClickerInterval) {
+                clearInterval(autoClickerInterval); // Clear any existing interval
+            }
 
-// Start the optimized clicker
-animationFrameClicker();
+            autoClickerInterval = setInterval(() => {
+                bigCookie.click();
+            }, clickSpeed);
+        }
 
-// To stop the clicker, call stopClicker() in the console
+        // Function to stop the auto-clicker
+        function stopAutoClicker() {
+            if (autoClickerInterval) {
+                clearInterval(autoClickerInterval);
+                autoClickerInterval = null;
+            }
+        }
+
+        // Toggle button functionality
+        document.getElementById('toggleAutoClick').addEventListener('click', function () {
+            if (autoClickerInterval) {
+                stopAutoClicker();
+                this.textContent = 'Start Auto-Clicker';
+            } else {
+                startAutoClicker();
+                this.textContent = 'Stop Auto-Clicker';
+            }
+        });
+    </script>
+</body>
+</html>
 	
 function romanize(num){
     if (isNaN(num))
