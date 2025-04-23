@@ -41,6 +41,7 @@ function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
             width: 300px;
             text-align: left;
             background-color: #f9f9f9;
+            display: none; /* Hide menu by default */
         }
         .menu label {
             display: block;
@@ -68,7 +69,7 @@ function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 </head>
 <body>
     <h1>Auto Clicker with GUI</h1>
-    <div class="menu">
+    <div class="menu" id="menu">
         <label for="clicksPerSecond">Clicks per second:</label>
         <input type="number" id="clicksPerSecond" value="10" min="1" max="1000">
         
@@ -116,6 +117,23 @@ function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
             } else {
                 startAutoClicker();
                 this.textContent = 'Stop Auto-Clicker';
+            }
+        });
+
+        // Function to toggle the visibility of the menu
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block'; // Show the menu
+            } else {
+                menu.style.display = 'none'; // Hide the menu
+            }
+        }
+
+        // Listen for the 'G' key press to toggle the menu
+        document.addEventListener('keydown', function (event) {
+            if (event.key.toLowerCase() === 'g') { // Check if 'G' is pressed
+                toggleMenu();
             }
         });
     </script>
