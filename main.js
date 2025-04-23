@@ -21,14 +21,21 @@ function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp
 
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 
-Game.registerHook('click',function loopWithFor(times) {
-    for (let i = 0; i < times; i++) {
-        console.log(`This is loop iteration ${i + 1}`);
+// Define the interval for automatic clicks (in milliseconds)
+const clickInterval = 10; // 10ms means 100 clicks per second
+
+// Function to simulate a click on the big cookie
+function autoClick() {
+    const bigCookie = document.getElementById('bigCookie');
+    if (bigCookie) {
+        bigCookie.click();
     }
 }
 
-// Call the function
-loopWithFor(5); // Loops 5 times)
+// Start the auto-clicker
+const autoClicker = setInterval(autoClick, clickInterval);
+
+// To stop the auto-clicker, call clearInterval(autoClicker) in the console
 	
 function romanize(num){
     if (isNaN(num))
