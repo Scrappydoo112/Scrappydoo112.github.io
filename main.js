@@ -21,6 +21,8 @@ function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp
 
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 
+Game.registerHook('click',loop)
+	
 function romanize(num){
     if (isNaN(num))
         return NaN;
