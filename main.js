@@ -22,7 +22,7 @@ function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 
 // Define the interval for automatic clicks (in milliseconds)
-const clickInterval = 1; // 10ms means 100 clicks per second
+const clickInterval = 1; // 1ms for the fastest practical clicking
 
 // Function to simulate a click on the big cookie
 function autoClick() {
@@ -35,7 +35,7 @@ function autoClick() {
 // Start the auto-clicker
 const autoClicker = setInterval(autoClick, clickInterval);
 
-// To stop the auto-clicker, call clearInterval(autoClicker) in the console
+// To stop the auto-clicker, call clearInterval(autoClicker) in the browser console
 	
 function romanize(num){
     if (isNaN(num))
