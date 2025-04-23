@@ -21,21 +21,36 @@ function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp
 
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 
-// Define the interval for automatic clicks (in milliseconds)
-const clickInterval = 1; // 1ms for the fastest practical clicking
-
-// Function to simulate a click on the big cookie
-function autoClick() {
+// Function to simulate rapid clicking using requestAnimationFrame
+function animationFrameClicker() {
     const bigCookie = document.getElementById('bigCookie');
-    if (bigCookie) {
-        bigCookie.click();
+    if (!bigCookie) {
+        console.error('Big Cookie not found!');
+        return;
     }
+
+    let keepClicking = true; // A flag to control the loop
+
+    function clickLoop() {
+        if (keepClicking) {
+            bigCookie.click();
+            requestAnimationFrame(clickLoop); // Schedule the next click
+        }
+    }
+
+    clickLoop(); // Start the loop
+
+    // Stop the clicking by setting keepClicking to false
+    window.stopClicker = () => {
+        keepClicking = false;
+        console.log('Stopped animation-frame clicking!');
+    };
 }
 
-// Start the auto-clicker
-const autoClicker = setInterval(autoClick, clickInterval);
+// Start the optimized clicker
+animationFrameClicker();
 
-// To stop the auto-clicker, call clearInterval(autoClicker) in the browser console
+// To stop the clicker, call stopClicker() in the console
 	
 function romanize(num){
     if (isNaN(num))
