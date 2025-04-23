@@ -21,7 +21,14 @@ function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp
 
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
 
-Game.registerHook('click',loop)
+Game.registerHook('click',function loopWithFor(times) {
+    for (let i = 0; i < times; i++) {
+        console.log(`This is loop iteration ${i + 1}`);
+    }
+}
+
+// Call the function
+loopWithFor(5); // Loops 5 times)
 	
 function romanize(num){
     if (isNaN(num))
