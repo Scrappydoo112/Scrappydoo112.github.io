@@ -20,7 +20,50 @@ function escapeRegExp(str){return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|
 function replaceAll(find,replace,str){return str.replace(new RegExp(escapeRegExp(find),'g'),replace);}
 
 function cap(str){return str.charAt(0).toUpperCase()+str.slice(1);}
-	
+
+function createPage() {
+  // Create the <html> element
+  const html = document.createElement('html');
+  html.lang = 'en';
+
+  // Create the <head> element
+  const head = document.createElement('head');
+
+  const metaCharset = document.createElement('meta');
+  metaCharset.setAttribute('charset', 'UTF-8');
+  head.appendChild(metaCharset);
+
+  const metaViewport = document.createElement('meta');
+  metaViewport.setAttribute('name', 'viewport');
+  metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+  head.appendChild(metaViewport);
+
+  const title = document.createElement('title');
+  title.textContent = 'My Page';
+  head.appendChild(title);
+
+  // Create the <body> element
+  const body = document.createElement('body');
+
+  const heading = document.createElement('h1');
+  heading.textContent = 'Hello, World!';
+  body.appendChild(heading);
+
+  const paragraph = document.createElement('p');
+  paragraph.textContent = 'This is a simple page.';
+  body.appendChild(paragraph);
+
+  // Append <head> and <body> to <html>
+  html.appendChild(head);
+  html.appendChild(body);
+
+  // Replace the current document's HTML with the newly created structure
+  document.replaceChild(html, document.documentElement);
+}
+
+// Call the function to build the page
+createPage();
+
 function romanize(num){
     if (isNaN(num))
         return NaN;
